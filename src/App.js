@@ -2,25 +2,41 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component
+{
+  constructor (props) {
+    super(props);
+    this.state = {
+      tmp: "",
+      text: "",
+    };
+  }
+
+  //handleChange = e => this.setState({ tmp: e.target.value, });
+  handleChange = ({ target: { value } }) => this.setState({ tmp: value, });
+
+  handleSubmit = e => {
+    const { text, tmp } = this.state;
+    this.setState({
+      text: text + ' ' + tmp,
+      tmp: "",
+    });
+  }
+
+  render () {
+    const { text, tmp } = this.state;
+    return (
+      <div className="App">
+      Hello World !!
+      {/** ここにコードを追記していく */}
+        <div>
+          <input type="text" value={tmp} onChange={this.handleChange} />
+          <button type="button" onClick={this.handleSubmit} >送信</button>
+        </div>
+        <h1>{text}</h1>
+      </div>
+    );
+  }
 }
 
 export default App;
