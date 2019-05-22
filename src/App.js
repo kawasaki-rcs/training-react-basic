@@ -1,42 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import './App.css'
+
+import { withStyles } from '@material-ui/core/styles'
+
+import { ConnectedRouter } from 'react-router-redux'
+
+import history from './wrapper/myHistory'
+import Routes from './component/Routes'
+
+
+const styles = theme => ({
+  scrollable: {
+    height: "100%",
+    width: "100%",
+    overflowY: "scroll",
+    overflowX: "hidden;",
+    //overflow: "scroll",
+    WebkitOverflowScrolling: "touch",
+    position: "fixed",
+  }
+})
 
 class App extends React.Component
 {
   constructor (props) {
-    super(props);
+    super(props)
     this.state = {
-      tmp: "",
-      text: "",
-    };
+    }
   }
 
-  //handleChange = e => this.setState({ tmp: e.target.value, });
-  handleChange = ({ target: { value } }) => this.setState({ tmp: value, });
-
-  handleSubmit = e => {
-    const { text, tmp } = this.state;
-    this.setState({
-      text: text + ' ' + tmp,
-      tmp: "",
-    });
-  }
 
   render () {
-    const { text, tmp } = this.state;
+    const { classes } = this.props
     return (
-      <div className="App">
-      Hello World !!
-      {/** ここにコードを追記していく */}
-        <div>
-          <input type="text" value={tmp} onChange={this.handleChange} />
-          <button type="button" onClick={this.handleSubmit} >送信</button>
+      <ConnectedRouter history={history} >
+        <div className={classes.scrollable} >
+          <Routes />
         </div>
-        <h1>{text}</h1>
-      </div>
-    );
+      </ConnectedRouter>
+    )
   }
 }
 
-export default App;
+export default withStyles(styles)(App)
