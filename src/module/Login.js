@@ -8,9 +8,11 @@ import {
 //-- Action Creaters
 
 export const reqLogin = ({ username, password }) => {
+    //let usernameDN = `${username}@${process.env.REACT_APP_DN_BASE}`
     return {
         type: REQUEST_LOGIN,
         payload: { username, password },
+        username: username,
     }
 }
 
@@ -18,10 +20,11 @@ export const fetchLogin = (data) => {
     return authFetch(`/authenticate`, data)
 }
 
-export const successLogin = ({ token }) => {
+export const successLogin = ({ token, username }) => {
     localStorage.setItem("token", token)
     return {
         type: SUCCESS_LOGIN,
+        username,
     }
 }
 
@@ -35,6 +38,7 @@ export const failureLogin = (error) => {
 
 const defaultState = {
     isReqLogin: false,
+    username: "",
 }
 
 export const Login = (state=defaultState, action) => {
@@ -46,6 +50,7 @@ export const Login = (state=defaultState, action) => {
         case SUCCESS_LOGIN:
             return Object.assign({}, state, {
                 isReqLogin: false,
+                username: action.username,
             })
         case FAILURE_LOGIN:
             return Object.assign({}, state, {

@@ -52,3 +52,19 @@ export const authFetch = (path, payload) =>  {
     }
     return doFetch(path, request)
 }
+
+
+/**
+ * エラー応答を解析、表示しやすい形式に修正して返す
+ * 現状は文字列のみ返す
+ * @param {*} err 
+ * @return string
+ */
+export const parseErrorResponse = err => {
+    if ( typeof err === 'string' ) return err
+    if ( typeof err === 'object' ) {
+       if ( "error" in err && !err.error )  return ""
+       if ( "message" in err )  return err.message
+    }
+    return ""
+ }

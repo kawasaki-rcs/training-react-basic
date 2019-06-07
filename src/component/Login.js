@@ -38,10 +38,7 @@ class Login extends React.Component
 
     handleSubmit = e => {
         const { username, password } = this.state
-
-        let usernameDN = `${username}@${process.env.REACT_APP_DN_BASE}`
-        
-        this.props.reqLogin({ username: usernameDN, password })
+        this.props.reqLogin({ username, password })
         e.preventDefault()
     }
 
@@ -49,7 +46,7 @@ class Login extends React.Component
         const { classes } = this.props
         const { username, password } = this.state
 
-        const gwrap = component => <Grid item className={classes.gridItem} >{component}</Grid>
+        //const gwrap = component => <Grid item className={classes.gridItem} >{component}</Grid>
 
         return (
             <Grid container
@@ -58,15 +55,16 @@ class Login extends React.Component
                 justify="center"
                 alignItems="center"
              >
-                { gwrap(
+                <Grid item className={classes.gridItem} >
                     <TextField
                         variant="outlined"
                         value={username}
                         label="ユーザ名"
                         onChange={this.handleChange('username')}
                         />
-                )}
-                { gwrap(
+                </Grid>
+
+                <Grid item className={classes.gridItem} >
                     <TextField
                         variant="outlined"
                         value={password}
@@ -74,14 +72,16 @@ class Login extends React.Component
                         type="password"
                         onChange={this.handleChange('password')}
                         />
-                ) }
-                { gwrap(
+                </Grid>
+
+                <Grid item className={classes.gridItem} >
                     <Button
                         variant="contained"
                         color="primary"
+                        disabled={ username==="" || password==="" }
                         onClick={this.handleSubmit}
                     >ログイン</Button>
-                ) }
+                </Grid>
             </Grid>
         )
     }

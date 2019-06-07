@@ -14,7 +14,9 @@ import immutableTransform from 'redux-persist-transform-immutable'
 import history from '../wrapper/myHistory'
 
 import rootSaga from './sagas'
+import { App } from './App'
 import { Login } from './Login'
+import { Top } from './Top'
 
 
 //---- Store の永続化設定
@@ -29,12 +31,21 @@ const persistConfig = {
         // Session で維持する状態は全て記録しない
         'Session',
         // 以下、特殊な persistConfig 指定のため全体から外した状態
+        'App',
         'Login',
+        'Top',
     ],
 }
 
 
 //-- リクエスト中の状態を保存しないための特殊な persistConfig 集
+
+const appConfig = {
+    key: 'App',
+    storage: storage,
+    blacklist: ['errorOpen', 'errorMessage'],
+    transforms: [immutableTransform()]
+}
 
 const loginConfig = {
     key: 'Login',
@@ -43,9 +54,17 @@ const loginConfig = {
     transforms: [immutableTransform()]
 }
 
+const topConfig = {
+    key: 'Top',
+    storage: storage,
+    blacklist: ['isReqAttend'],
+    transforms: [immutableTransform()]
+}
 
 const myReducer = combineReducers({
+    App: persistReducer(appConfig, App),
     Login: persistReducer(loginConfig, Login),
+    Top: persistReducer(topConfig, Top),
     router: routerReducer,
 })
 
@@ -60,6 +79,15 @@ const rtMiddleware = routerMiddleware(history)
 const persistedReducer = persistReducer(persistConfig, myReducer)
 
 // Redux の Store の本体を生成
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+let createStoreWithMiddleware = composeEnhancers(
+    applyMiddleware(sagaMiddleware, rtMiddleware)
+)(createStore)
+
+const myStore = createStoreWithMiddleware(persistedReducer)
+
+/* // Redux の Store の本体を生成 (以前の redux の書き方)
 const myStore = createStore(
   persistedReducer,
   compose(
@@ -70,6 +98,7 @@ const myStore = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   ),
 )
+*/
 
 // redux-saga の受付タスク開始
 sagaMiddleware.run(rootSaga)
