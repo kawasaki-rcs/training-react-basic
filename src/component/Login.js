@@ -43,7 +43,7 @@ class Login extends React.Component
     }
 
     render () {
-        const { classes } = this.props
+        const { classes, isReqLogin } = this.props
         const { username, password } = this.state
 
         //const gwrap = component => <Grid item className={classes.gridItem} >{component}</Grid>
@@ -78,7 +78,7 @@ class Login extends React.Component
                     <Button
                         variant="contained"
                         color="primary"
-                        disabled={ username==="" || password==="" }
+                        disabled={ username==="" || password==="" || isReqLogin }
                         onClick={this.handleSubmit}
                     >ログイン</Button>
                 </Grid>

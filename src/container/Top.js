@@ -9,6 +9,7 @@ import { reqAttend } from '../module/Top';
 const mapStateToProps = state => {
     return { 
         //isReqLogin: state.Login.isReqLogin,
+        isReqAttend: state.Top.isReqAttend,
         username: state.Login.username,
     }
 }

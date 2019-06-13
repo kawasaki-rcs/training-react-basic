@@ -8,6 +8,7 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import history from './wrapper/myHistory'
 import Routes from './component/Routes'
+import ReLoginDialog from './component/ReLoginDialog'
 
 
 const styles = theme => ({
@@ -34,12 +35,13 @@ class App extends React.Component
 
   render () {
     const { classes } = this.props
-    const { errorOpen, errorMessage, setMainError } = this.props
+    const { openReLoginDlg, errorOpen, errorMessage, setMainError } = this.props
     console.log(errorMessage)
     return (
       <ConnectedRouter history={history} >
         <div className={classes.scrollable} >
           <Routes />
+          <ReLoginDialog open={openReLoginDlg} />
           <Snackbar
               className={classes.snackbar}
               open={errorOpen}

@@ -3,6 +3,7 @@ import {
    REQUEST_LOGIN, 
    SUCCESS_LOGIN,
    FAILURE_LOGIN,
+   INVALID_TOKEN,
 } from './actionTypes';
 
 //-- Action Creaters
@@ -34,11 +35,18 @@ export const failureLogin = (error) => {
     }
 }
 
+export const invalidToken = () => {
+    return {
+      type: INVALID_TOKEN,
+    }
+  } 
+
 //-- Reducer
 
 const defaultState = {
     isReqLogin: false,
     username: "",
+    openReLoginDlg: false,
 }
 
 export const Login = (state=defaultState, action) => {
@@ -51,10 +59,15 @@ export const Login = (state=defaultState, action) => {
             return Object.assign({}, state, {
                 isReqLogin: false,
                 username: action.username,
+                openReLoginDlg: false,
             })
         case FAILURE_LOGIN:
             return Object.assign({}, state, {
                 isReqLogin: false,
+            })
+        case INVALID_TOKEN:
+            return Object.assign({}, state, {
+                openReLoginDlg: true,
             })
         default:
             return state

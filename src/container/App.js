@@ -8,6 +8,7 @@ const mapStateToProps = state => {
     return { 
         errorOpen: state.App.errorOpen,
         errorMessage: state.App.errorMessage,
+        openReLoginDlg: state.Login.openReLoginDlg,
     }
 }
 

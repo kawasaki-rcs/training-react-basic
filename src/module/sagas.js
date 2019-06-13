@@ -7,6 +7,8 @@ import {
     FETCH_TIMEOUT,
     REQ_PUSH,
     REQUEST_ATTEND,
+    SUCCESS_LOGIN,
+    INVALID_TOKEN,
 } from './actionTypes'
 
 import { setPersistPath } from './others'
@@ -37,21 +39,29 @@ function* runAuthReq(fetchAC, resAC, action) {
                 timeout: delay(TIMEOUT_SECOND())
             })
 
-            const { payload, error } = res
             if ( timeout ) {
                 yield put( { type: FETCH_TIMEOUT } )
                 break
             }
+
+            const { payload, error } = res
             if ( !payload || error ) {
+                if (true) {
+
+                    const { payload, error } = res
+                }
                 //-- トークン無効エラー
-                /*
-                if ( error === EXPIRED_TOKEN_ERR ) {
+
+                if ( true ) { // 本来は想定エラーであるかチェックをしておいたほうが良い
+                //if ( error === EXPIRED_TOKEN_ERR ) {
+                    yield put(setMainError({ errorMessage: "再ログインして下さい。" }))
                     yield put( { type: INVALID_TOKEN } )
                     yield take(SUCCESS_LOGIN)
                     continue
                 }
-                */
+
                 //-- いずれのトークンエラーでもなかった場合
+                //! 上記で全て無効トークン判定に拾われるので以下は無意味
                 console.log("予期されないエラー")
                 console.log(payload, error)
                 yield put(setMainError({ errorMessage: parseErrorResponse(error) }))
@@ -64,7 +74,7 @@ function* runAuthReq(fetchAC, resAC, action) {
       } catch (err) {
             //-- fetch 処理全体のエラー (ドメイン解決失敗等)
             console.log(err)
-            //yield put(setMainError({ errorMessage: parseErrorResponse(err) }))
+            yield put(setMainError({ errorMessage: parseErrorResponse(err) }))
             yield put( { type: FETCH_ERROR } )
             break
       }
@@ -107,7 +117,7 @@ function* handleReqLogin() {
 
 //-- 出欠リクエスト受付
 function* handleReqAttend() {
-    yield takeEvery(REQUEST_ATTEND, runAuthReq, fetchAttend, resAttend)
+    yield takeEvery(REQUEST_ATTEND, runAuthReq, fetchAttend, resAttend) // => runAuthReq(fetchAttend, resAttend, action)
 }
 
 

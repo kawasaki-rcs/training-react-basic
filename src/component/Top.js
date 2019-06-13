@@ -18,6 +18,8 @@ import TextField from "@material-ui/core/TextField"
 import Dialog from "@material-ui/core/Dialog"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogActions from "@material-ui/core/DialogActions"
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Slide from "@material-ui/core/Slide"
 
 
 import DialogTitle from '../wrapper/DialogTitle'
@@ -29,6 +31,10 @@ const styles = theme => ({
     gridContainer: {
         height: "100%",
     },
+    progress: {
+        //display: "",
+        top: "50%",
+    },
     gridItem: {},
     buttonBase: {
         width: "100%",
@@ -38,17 +44,35 @@ const styles = theme => ({
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        borderRadius: "0px",
+        zIndex: 0,
     },
+    buttonOutlined: { border: 0 },
     attend: {
         backgroundColor: blue[400],
-        //backgroundImage: "url('/img/top/calender.svg')",
+        backgroundImage: "url('/img/attend.svg')",
     },
-    home: { backgroundColor: green[400] },
-    leave: { backgroundColor: orange[800] },
+    home: { 
+        backgroundColor: green[400],
+        backgroundImage: "url('/img/home.svg')",
+    },
+    leave: {
+        backgroundColor: orange[800],
+        backgroundImage: "url('/img/leave.svg')",
+    },
     out: { backgroundColor: red[400] },
-    other: { backgroundColor: grey[600] },
-    onduty: { backgroundColor: indigo[400] },
-    logout: { backgroundColor: blueGrey[400] },
+    other: { 
+        backgroundColor: grey[600],
+        backgroundImage: "url('/img/other.svg')",
+    },
+    onduty: {
+        backgroundColor: indigo[400],
+        backgroundImage: "url('/img/onduty.svg')",
+    },
+    logout: { 
+        backgroundColor: blueGrey[400],
+        backgroundImage: "url('/img/logout.svg')",
+    },
     margin: { margin: theme.spacing.unit },
     dialogRootPaper: {},
     commentField: {}, 
@@ -91,7 +115,8 @@ class Top extends React.Component
     }
 
     handleAttend = status => e => {
-        const user_id = 83
+        //const user_id = 83
+        const user_id = this.props.username
         this.props.reqAttend({ user_id, status, comment: "", back_time: "" })
         this.setState({ ...defaultState, status, openDetail: true })
         e.preventDefault()
@@ -116,7 +141,7 @@ class Top extends React.Component
     handleClose = () => this.setState(defaultState)
 
     render () {
-        const { classes } = this.props
+        const { classes, isReqAttend } = this.props
         const { openDetail, status, comment, back_time } = this.state
 
         const gwrap = component => <Grid item xs={6} className={classes.gridItem} >{component}</Grid>
@@ -135,20 +160,23 @@ class Top extends React.Component
                         <Button
                         variant="outlined"
                         className={classNames(classes.buttonBase, classes[s.type])}
+                        classes={{ outlined: classes.buttonOutlined }}
                         onClick={this.handleAttend(s.type)}
-                    >{s.label}</Button>
+                    >{ isReqAttend ? <CircularProgress className={classes.progress} /> : s.label}</Button>
                     </Grid>
                 )) }
                 <Grid item xs={6} className={classes.gridItem} >
                     <Button
                         variant="outlined"
                         className={classNames(classes.buttonBase, classes.onduty)}
-                    >当番</Button>
+                        classes={{ outlined: classes.buttonOutlined }}
+                    >当番連絡</Button>
                 </Grid>
                 <Grid item xs={6} className={classes.gridItem} >
                     <Button
                         variant="outlined"
                         className={classNames(classes.buttonBase, classes.other)}
+                        classes={{ outlined: classes.buttonOutlined }}
                         onClick={() => this.setState({  })}
                     >その他</Button>
                 </Grid>
@@ -156,21 +184,24 @@ class Top extends React.Component
                     <Button
                         variant="outlined"
                         className={classNames(classes.buttonBase, classes.logout)}
+                        classes={{ outlined: classes.buttonOutlined }}
                         onClick={this.handleLogout}
                     >ログアウト</Button>
                 </Grid>
             </Grid>,
             <Dialog
-                open={openDetail} 
+                open={openDetail && !isReqAttend} 
                 onClose={this.handleClose}
                 classes={{ paper: classes.margin }}
                 fullWidth={true}
                 maxWidth="md"
+                transitionComponent={Slide}
+                transitionDuration={1000}
                 > 
-                <DialogTitle onClose={this.handleClose} >{ getLabel(status) }</DialogTitle>
+                <DialogTitle onClose={this.handleClose} >{ getLabel(status) } 設定にしました！</DialogTitle>
                 <DialogContent>
                     <Grid container >
-                        <Grid item xs="12" >詳細な情報を入力できます。</Grid>
+                        <Grid item xs="12" >詳細な情報を追加入力できます。</Grid>
                         <Grid item >
                             <TextField
                                 variant="outlined"
@@ -204,7 +235,6 @@ class Top extends React.Component
                         onClick={this.handleClose}
                         >入力しない</Button>
                 </DialogActions>
-
             </Dialog>
         ]
         )
