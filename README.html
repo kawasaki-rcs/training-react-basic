@@ -414,12 +414,24 @@ git <span class="hljs-built_in">clone</span> https://github.com/kawasaki-rcs/tra
 
 <span class="hljs-comment"># パッケージのDL</span>
 npm install
-
-<span class="hljs-comment"># ビルド</span>
-npm run build
-
-<span class="hljs-comment"># ローカル環境での実行</span>
+</div></code></pre>
+<ul>
+<li>環境設定ファイルを設定
+<ul>
+<li><code>.env.default</code> を複製して<code>.env</code>にリネームしてから内容を編集</li>
+</ul>
+</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-comment"># bash の場合</span>
+cp .env.default .env
+vim .env
+</div></code></pre>
+<ul>
+<li>実行</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-comment"># ローカル環境での実行</span>
 npm start
+
 </div></code></pre>
 <h2 id="%E5%82%99%E8%80%83">備考</h2>
 <ul>

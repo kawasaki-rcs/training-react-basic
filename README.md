@@ -22,13 +22,28 @@ cd training-react-basic
 
 # パッケージのDL
 npm install
+```
 
-# ビルド
-npm run build
+- 環境設定ファイルを設定
+   - `.env.default` を複製して`.env`にリネームしてから内容を編集
 
+```bash
+# bash の場合
+cp .env.default .env
+vim .env
+```
+
+
+
+
+- 実行
+
+```bash
 # ローカル環境での実行
 npm start
+
 ```
+
 
 
 ## 備考
